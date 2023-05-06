@@ -11,8 +11,9 @@ EXPOSE 8000
 
 ARG DEV=false
 ENV DEV $DEV
-RUN echo $DEV
-# RUN if [ "${DEV}" = "true" ]; then cat /tmp/requirements.dev.txt; else echo "release version"; fi
+RUN apk add --update --no-cache postgresql-client
+RUN apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev
 RUN python -m venv /py && \ 
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt
